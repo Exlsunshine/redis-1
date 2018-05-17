@@ -35,6 +35,7 @@ type ClusterOptions struct {
 	// Enables read-only commands on slave nodes.
 	ReadOnly bool
 	// Allows routing read-only commands to the closest master or slave node.
+	// It automatically enables ReadOnly.
 	RouteByLatency bool
 	// Allows routing read-only commands to the random master or slave node.
 	RouteRandomly bool
@@ -387,7 +388,9 @@ type clusterState struct {
 	generation uint32
 }
 
-func newClusterState(nodes *clusterNodes, slots []ClusterSlot, origin string) (*clusterState, error) {
+func newClusterState(
+	nodes *clusterNodes, slots []ClusterSlot, origin string,
+) (*clusterState, error) {
 	c := clusterState{
 		nodes:      nodes,
 		generation: nodes.NextGeneration(),
